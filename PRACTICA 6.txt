@@ -1,0 +1,83 @@
+PRACTICA 1
+
+sudo yum install gnupg -y
+gpg --full-generate-key
+
+
+gpg --list-keys
+
+echo "Este es un archivo secreto" > secreto.txt
+gpg --encrypt --recipient "tu@email.com" secreto.txt
+Esto crea secreto.txt.gpg, que solo puede ser descifrado por la clave privada.
+
+gpg --decrypt secreto.txt.gpg > secreto_descifrado.txt
+
+
+-------------------------------------------------------------
+PRACTICA 2
+
+sudo iptables -A INPUT -p tcp --dport 80 -j REJECT
+
+sudo iptables -L -n -v
+
+sudo iptables -D INPUT -p tcp --dport 22 -j REJECT
+
+Firewall-cmd —list-All
+Firewall-cmd —get-active-zones
+Firewall-cmd —zone=public —add-port=80/tcp
+Firewall-cmd —zone=public —add-port=22/tcp
+Firewall-cmd —zone=public —remove-port=80/tcp
+Firewall-cmd —zone=public —remove-port=22/tcp
+
+
+
+
+
+
+--------------------------------------------------------
+PRACTICA 3:
+sudo dnf install epel-release -y
+sudo dnf install suricata -y
+suricata --build-info
+sudo nano /etc/suricata/suricata.yaml
+sudo nano /etc/suricata/rules/local.rules
+alert icmp any any -> any any (msg:"ICMP Echo Request Detected (Ping)"; sid:1000001; rev:1;)
+alert tcp any any -> any 21 (msg:"Tráfico hacia puerto 21 (FTP) detectado"; sid:1000002; rev:1;)
+alert tcp any any -> any 22 (msg:"Tráfico hacia puerto 22 (SSH) detectado"; sid:1000003; rev:1;)
+alert tcp any any -> any 80 (msg:"Tráfico hacia puerto 80 (HTTP) detectado"; sid:1000004; rev:1;)
+sudo suricata -c /etc/suricata/suricata.yaml -i <interfaz_red>
+sudo tail -f /var/log/suricata/fast.log
+--------------------------------------------------------------------
+PRACTICA 4:
+
+sudo yum install google-authenticator -y
+sudo yum install qrencode
+
+google-authenticator
+
+
+sudo nano /etc/pam.d/sshd
+
+auth required pam_google_authenticator.so
+
+
+
+
+sudo nano /etc/ssh/sshd_config
+
+ChallengeResponseAuthentication yes
+AuthenticationMethods publickey,password publickey,keyboard-interactive
+UsePAM yes
+
+
+
+
+sudo systemctl restart sshd
+
+
+
+ssh joancuevas@
+
+
+Contraseña del usuario
+Código de Google Authenticator
